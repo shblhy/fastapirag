@@ -8,8 +8,8 @@ from tortoise import run_async, Tortoise
 async def main():
     await Tortoise.init(config=TORTOISE_ORM)
     await User.create(
-        username="admin2",
-        email="admin2@admin.com",
+        username="admin",
+        email="admin@admin.com",
         hashed_password=get_password_hash("admin123456"),
         is_active=True
     )

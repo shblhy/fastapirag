@@ -4,3 +4,7 @@ pydantic
 tortoise-orm
 sse-starlette
 requests
+pyyaml
+openai
+pyjwt
+python-multipart
