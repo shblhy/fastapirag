@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+pydantic
+tortoise-orm
+sse-starlette
+requests
