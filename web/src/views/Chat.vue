@@ -78,6 +78,7 @@ import { ref, computed, onMounted, nextTick, watch, watchEffect } from 'vue'
 import { useUserStore } from '../stores/user'
 import { useChatStore } from '../stores/chat'
 import { fetchEventSource } from '@microsoft/fetch-event-source'
+import config from '../config'
 
 // 头像配置
 const userAvatar = 'https://bangkecs.oss-cn-hangzhou.aliyuncs.com/img%2Faflufzkgnvbatf346ucziw.png?OSSAccessKeyId=LTAI5tB5XRKP2jNcCyMrq1jo&Expires=96331954954&Signature=XNxYiVNZeCP5GOeuCNAuR74u9gw%3D'
@@ -146,7 +147,7 @@ const sendMessage = async () => {
     chatStore.isStreaming = true
     const authorizationToken = localStorage.getItem('token')
     
-    await fetchEventSource(`http://localhost:8798/v1/chat/completions?${params}`, {
+    await fetchEventSource(`${config.apiBaseUrl}/v1/chat/completions?${params}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${authorizationToken}`,

@@ -72,7 +72,7 @@ const handleLogout = async () => {
     
     try {
       // 调用后端登出接口
-      await fetch('http://localhost:8798/users/logout', {
+      await fetch('/users/logout', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
