@@ -14,6 +14,10 @@ class Token(BaseModel):
     token_type: str
 
 
+class LogoutResponse(BaseModel):
+    message: str
+
+
 @app.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     user = await authenticate_user(form_data.username, form_data.password)
@@ -33,3 +37,13 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 @app.get("/users/me")
 async def read_users_me(current_user: User = Depends(get_current_user)):
     return current_user
+
+
+@app.post("/users/logout", response_model=LogoutResponse)
+async def logout(current_user: User = Depends(get_current_user)):
+    """
+    用户登出接口
+    - 需要用户已登录（带有有效的 token）
+    - 返回登出成功的消息
+    """
+    return {"message": "登出成功"}
