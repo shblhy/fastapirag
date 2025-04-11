@@ -1,0 +1,39 @@
+env: 'test'
+db_path: 'E:\code\ragproj_fastapi\backend\db.sqlite3'
+cors_allowed_origins:
+  - http://127.0.0.1:8000
+  - http://localhost:8080
+  - http://192.168.0.7:8000
+redis:
+  BACKEND: django_redis.cache.RedisCache
+  LOCATION: redis://127.0.0.1:6379/1
+  OPTIONS:
+    CLIENT_CLASS: django_redis.client.DefaultClient
+channel_redis: redis://127.0.0.1:6379/1
+log_dir_path:
+  E:\code\nixian\ragproj\local_logs
+csrf_trusted_origins:
+  - http://127.0.0.1:8000
+  - http://localhost:8080
+  - http://192.168.0.7:8000
+allow_hosts:
+  - 127.0.0.1
+  - localhost
+  - 192.168.0.7
+website_path: "http://127.0.0.1:8000"
+ali_bucket:
+  access_key: ''
+  access_secret: ''
+  endpoint: 'oss-cn-hangzhou.aliyuncs.com'
+  intranet_endpoint: 'oss-cn-hangzhou-internal.aliyuncs.com'
+  cus_endpoint: 'oss-cn-hangzhou.aliyuncs.com'
+  name: ''
+jwt_secret_key: set-your-jwt_secret_key
+kimi_api_key: ""
+siliconflow_api_key: ""
+TRANSFORMERS_CACHE: F:\huggingface_cache
+VECTOR_MODEL: shibing624/text2vec-bge-m3
+bailian_api_key:
+aimlapi_api_key:
+deepseek_api_key:
+toutiao_api_key:

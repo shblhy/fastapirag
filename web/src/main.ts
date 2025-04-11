@@ -16,10 +16,12 @@ app.use(router)
    .use(pinia)
    .use(ElementPlus)
 
-// 初始化用户状态
 const userStore = useUserStore()
-await userStore.init()
-
-app.mount('#app')
+userStore.init().then(() => {
+  app.mount('#app')
+}).catch(error => {
+  console.error('Failed to initialize user store:', error)
+  app.mount('#app') // 即使初始化失败也挂载应用
+})
 
 
