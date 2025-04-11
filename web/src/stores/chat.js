@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import config from '../config'
 
 export const useChatStore = defineStore('chat', {
   state: () => ({
@@ -49,7 +50,6 @@ export const useChatStore = defineStore('chat', {
       
       try {
         this.isStreaming = true
-        image.png
         // 构建 URL 参数
         const params = new URLSearchParams({
           prompt: message.content,
@@ -57,7 +57,7 @@ export const useChatStore = defineStore('chat', {
         })
 
         // 使用 fetch API 代替 EventSource
-        const response = await fetch(`http://localhost:8798/v1/chat/completions?${params}`, {
+        const response = await fetch(`${config.apiBaseUrl}/v1/chat/completions?${params}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Accept': 'text/event-stream',
@@ -118,7 +118,7 @@ export const useChatStore = defineStore('chat', {
 
     async loadChatHistory() {
       try {
-        const response = await fetch('http://localhost:8798/v1/chat/history', {
+        const response = await fetch(`${config.apiBaseUrl}/v1/chat/history`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }

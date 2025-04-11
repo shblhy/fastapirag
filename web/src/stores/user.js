@@ -1,75 +1,93 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
-import router from '../router'
+import { useRouter } from 'vue-router'
+import config from '../config'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    token: localStorage.getItem('token'),
-    userInfo: null
+    token: localStorage.getItem('token') || '',
+    username: '',
+    isAuthenticated: false
   }),
   
   getters: {
     isLoggedIn: (state) => !!state.token,
-    username: (state) => state.userInfo?.username,
     avatar: (state) => state.userInfo?.avatar || '/default-avatar.png'
   },
   
   actions: {
-    async init() {
-      // 初始化时检查 token 并获取用户信息
-      if (this.token) {
-        try {
-          await this.fetchUserInfo()
-        } catch (error) {
-          // token 无效或过期
-          this.logout()
-          router.push('/login')
-        }
-      }
-    },
-    
     async login(username, password) {
       try {
         const formData = new URLSearchParams()
         formData.append('username', username)
         formData.append('password', password)
-        
-        const response = await axios.post('/token', formData, {
+
+        const response = await fetch(`${config.apiBaseUrl}/token`, {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
-          }
+          },
+          body: formData
         })
-        
-        this.token = response.data.access_token
-        localStorage.setItem('token', this.token)
-        
-        await this.fetchUserInfo()
+
+        if (!response.ok) {
+          throw new Error('Login failed')
+        }
+
+        const data = await response.json()
+        this.token = data.access_token
+        this.username = username
+        this.isAuthenticated = true
+        localStorage.setItem('token', data.access_token)
         return true
       } catch (error) {
-        console.error('Login failed:', error)
+        console.error('Login error:', error)
         return false
       }
     },
     
-    async fetchUserInfo() {
+    async init() {
+      if (!this.token) return
+
       try {
-        const response = await axios.get('/users/me', {
+        const response = await fetch(`${config.apiBaseUrl}/users/me`, {
           headers: {
-            Authorization: `Bearer ${this.token}`
+            'Authorization': `Bearer ${this.token}`
           }
         })
-        this.userInfo = response.data
+
+        if (!response.ok) {
+          throw new Error('Failed to get user info')
+        }
+
+        const data = await response.json()
+        this.username = data.username
+        this.isAuthenticated = true
       } catch (error) {
-        console.error('Failed to fetch user info:', error)
-        throw error
+        console.error('Init error:', error)
+        this.logout()
       }
     },
     
-    logout() {
-      this.token = null
-      this.userInfo = null
-      localStorage.removeItem('token')
-      router.push('/login')
+    async logout() {
+      try {
+        const response = await fetch(`${config.apiBaseUrl}/users/logout`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${this.token}`
+          }
+        })
+
+        if (!response.ok) {
+          console.error('Logout failed on server')
+        }
+      } catch (error) {
+        console.error('Logout error:', error)
+      } finally {
+        this.token = ''
+        this.username = ''
+        this.isAuthenticated = false
+        localStorage.removeItem('token')
+      }
     }
   }
 }) 

@@ -53,7 +53,8 @@
     5、cd ./backend/apps python main.py启动项目
 
     前端
-    1、npm install
-    2、npm run dev
+    1。.env.development 设置测试环境后端域名 .env.production设置前端环境域名，例如 VITE_API_BASE_URL = http://localhost:8798
+    2、npm install
+    3、npm run dev
 
     
